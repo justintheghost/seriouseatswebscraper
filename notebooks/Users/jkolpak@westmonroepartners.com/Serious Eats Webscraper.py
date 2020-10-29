@@ -14,56 +14,7 @@ from pyspark.sql.column import *
 
 # COMMAND ----------
 
-# Azure and Spark configs
-ACCOUNT_KEY="fs.azure.account.key.recipeanalysis2020.dfs.core.windows.net"
-ACCOUNT_SECRET_SCOPE="kv-secret-scope-recipe"
-ACCOUNT_KEY_NAME="blobstorage-kv"
-
-spark.conf.set("spark.sql.execution.arrow.enabled", "true")
-spark.conf.set(ACCOUNT_KEY, dbutils.secrets.get(scope = ACCOUNT_SECRET_SCOPE, key = ACCOUNT_KEY_NAME))
-
-# Set up configs for Azure SQL DB
-db_conn={}
-jdbcHostname = "recipeanalysis.database.windows.net"
-jdbcPort = 1433
-jdbcUsername="wmp"
-jdbcPassword=dbutils.secrets.get(scope = ACCOUNT_SECRET_SCOPE, key = "recipesqldb-kv")
-jdbcDatabase = "recipe"
-
-jdbcUrl = "jdbc:sqlserver://{0}:{1};database={2}".format(jdbcHostname, jdbcPort, jdbcDatabase)
-connectionProperties = {
-  "user" : jdbcUsername,
-  "password" : jdbcPassword,
-  "driver" : "com.microsoft.sqlserver.jdbc.SQLServerDriver"
-}
-
-db_conn['azureSQL']={'jdbcUrl': jdbcUrl, 'connProperties': connectionProperties}
-
-# COMMAND ----------
-
-# MAGIC %scala
-# MAGIC import com.microsoft.azure.sqldb.spark.config.Config
-# MAGIC 
-# MAGIC import com.microsoft.azure.sqldb.spark.query._
-# MAGIC 
-# MAGIC val ACCOUNT_SECRET_SCOPE = "kv-secret-scope-recipe"
-# MAGIC val jdbcHostname = "recipeanalysis.database.windows.net"
-# MAGIC val jdbcPort = 1433
-# MAGIC val jdbcUsername="wmp"
-# MAGIC val jdbcPassword=dbutils.secrets.get(scope = ACCOUNT_SECRET_SCOPE, key = "recipesqldb-kv")
-# MAGIC val jdbcDatabase = "recipe"
-# MAGIC 
-# MAGIC def updateSQL (query: String):Unit= {
-# MAGIC   val config = Config(Map(
-# MAGIC     "url"          -> jdbcHostname,
-# MAGIC     "databaseName" -> jdbcDatabase,
-# MAGIC     "user"         -> jdbcUsername,
-# MAGIC     "password"     -> jdbcPassword,
-# MAGIC     "queryCustom"  -> query
-# MAGIC   ))
-# MAGIC 
-# MAGIC   sqlContext.sqlDBQuery(config)
-# MAGIC }
+# TO DO: Add %run config file
 
 # COMMAND ----------
 
